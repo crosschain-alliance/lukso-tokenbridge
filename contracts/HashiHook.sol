@@ -1,0 +1,74 @@
+// SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.0;
+
+import {AbstractPostDispatchHook} from "@hyperlane-xyz/core/contracts/hooks/libs/AbstractPostDispatchHook.sol";
+import {IPostDispatchHook} from "@hyperlane-xyz/core/contracts/interfaces/hooks/IPostDispatchHook.sol";
+import {Message} from "@hyperlane-xyz/core/contracts/libs/Message.sol";
+import {TypeCasts} from "@hyperlane-xyz/core/contracts/libs/TypeCasts.sol";
+import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+
+import {IYaho} from "./interfaces/IYaho.sol";
+import {HashiManager} from "./HashiManager.sol";
+
+contract HashiHook is AbstractPostDispatchHook, Ownable {
+    using Message for bytes;
+    using TypeCasts for bytes32;
+
+    address public mailbox;
+    address public hashiISM;
+    HashiManager public hashiManager;
+
+    constructor(address mailbox_, address hashiManager_, address hashiISM_) {
+        mailbox = mailbox_;
+        hashiManager = HashiManager(hashiManager_);
+        hashiISM = hashiISM_;
+    }
+
+    /// @notice set new mailbox address
+    /// @param newMailBox new mail box address
+    function setMailbox(address newMailBox) external onlyOwner {
+        require(newMailBox != address(0), "Invalid Mailbox address");
+        mailbox = newMailBox;
+    }
+
+    /// @inheritdoc IPostDispatchHook
+    function hookType() external pure override returns (uint8) {
+        return uint8(IPostDispatchHook.Types.UNUSED);
+    }
+
+    /// @inheritdoc AbstractPostDispatchHook
+    /// @notice called by mailbox within dispatch function
+    /// @param message message to dispatch
+    function _postDispatch(
+        bytes calldata /*metadata*/,
+        bytes calldata message
+    ) internal override {
+        require(msg.sender == mailbox, "Only called by Mailbox");
+
+        address[] memory hashiReporter = hashiManager.getReporters();
+        address[] memory hashiAdapter = hashiManager.getAdapters();
+        require(hashiReporter.length > 0, "invalid reporter length");
+        require(hashiAdapter.length > 0, "invalid adapter length");
+
+        IYaho(hashiManager.getYaho()).dispatchMessage(
+            hashiManager.getTargetChainID(),
+            uint256(hashiManager.getThreshold()),
+            hashiISM, // recipient of the Hashi message
+            message,
+            hashiReporter,
+            hashiAdapter
+        );
+    }
+
+    /// @inheritdoc AbstractPostDispatchHook
+    /// @notice called by mailbox within dispatch function
+    /// @param message message to dispatch
+    /// @return return fee required to pass message through yaho
+    function _quoteDispatch(
+        bytes calldata /*metadata*/,
+        bytes calldata message
+    ) internal view override returns (uint256) {
+        // TODO
+        return 0;
+    }
+}
