@@ -34,7 +34,7 @@ contract HashiISM is IJushin, IInterchainSecurityModule {
     ) external returns (bytes memory) {
         _validateHashiMessage(sourceChainId, threshold, sender, adapters);
         bytes32 hashMsg = keccak256(abi.encodePacked(data));
-        require(!isApprovedByHashi[hashMsg]);
+        require(!isApprovedByHashi[hashMsg], "Msg has been approved by Hashi");
         _setHashiApprovalForMessage(hashMsg, true);
         emit ApprovedByHashi(hashMsg, true);
 
@@ -55,7 +55,7 @@ contract HashiISM is IJushin, IInterchainSecurityModule {
                 threshold == hashiManager.getExpectedThreshold() &&
                 keccak256(abi.encodePacked(adapters)) ==
                 hashiManager.getExpectedAdaptersHash()
-        );
+        , "Invalid Hashi Message");
     }
 
     function _setHashiApprovalForMessage(
