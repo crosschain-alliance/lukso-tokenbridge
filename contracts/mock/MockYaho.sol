@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import {Message} from "../interfaces/IMessage.sol";
+import {Message} from "../../hashi/packages/evm/contracts/interfaces/IMessage.sol";
+import { IAdapter } from "../../hashi/packages/evm/contracts/interfaces/IAdapter.sol";
+import { IReporter } from "../../hashi/packages/evm/contracts/interfaces/IReporter.sol";
 
 contract MockYaho {
     uint256 public currentNonce;
@@ -16,6 +18,13 @@ contract MockYaho {
         address[] calldata reporters,
         address[] calldata adapters
     ) external returns (uint256, bytes32[] memory) {
+
+        IReporter[] memory hashiReporters = new IReporter[](reporters.length);
+        IAdapter[] memory hashiAdapters = new IAdapter[](adapters.length);
+        for (uint256 i = 0; i < reporters.length; i++) {
+            hashiReporters[i] = IReporter(reporters[i]);
+            hashiAdapters[i] = IAdapter(adapters[i]);
+        }
         Message memory message = Message(
             currentNonce,
             targetChainId,
@@ -23,8 +32,8 @@ contract MockYaho {
             msg.sender,
             receiver,
             data,
-            reporters,
-            adapters
+            hashiReporters,
+            hashiAdapters
         );
 
         uint256 messageId = currentNonce;

@@ -7,7 +7,9 @@ import {Message} from "@hyperlane-xyz/core/contracts/libs/Message.sol";
 import {TypeCasts} from "@hyperlane-xyz/core/contracts/libs/TypeCasts.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
-import {IYaho} from "./interfaces/IYaho.sol";
+import { IAdapter } from "../hashi/packages/evm/contracts/interfaces/IAdapter.sol";
+import { IReporter } from "../hashi/packages/evm/contracts/interfaces/IReporter.sol";
+import {IYaho} from "../hashi/packages/evm/contracts/interfaces/IYaho.sol";
 import {HashiManager} from "./HashiManager.sol";
 
 contract HashiHook is AbstractPostDispatchHook, Ownable {
@@ -47,6 +49,13 @@ contract HashiHook is AbstractPostDispatchHook, Ownable {
 
         address[] memory hashiReporter = hashiManager.getReporters();
         address[] memory hashiAdapter = hashiManager.getAdapters();
+        IReporter[] memory reporters = new IReporter[](hashiReporter.length);
+        IAdapter[] memory adapters = new IAdapter[](hashiAdapter.length);
+        for (uint256 i = 0; i < reporters.length; i++) {
+            reporters[i] = IReporter(reporters[i]);
+            adapters[i] = IAdapter(adapters[i]);
+        }
+     
         require(hashiReporter.length > 0, "invalid reporter length");
         require(hashiAdapter.length > 0, "invalid adapter length");
 
@@ -55,8 +64,8 @@ contract HashiHook is AbstractPostDispatchHook, Ownable {
             uint256(hashiManager.getThreshold()),
             hashiISM, // recipient of the Hashi message
             message,
-            hashiReporter,
-            hashiAdapter
+            reporters,
+            adapters
         );
     }
 

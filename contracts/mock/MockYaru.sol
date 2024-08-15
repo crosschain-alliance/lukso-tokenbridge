@@ -2,8 +2,8 @@
 pragma solidity ^0.8.0;
 
 import "./MockYaho.sol";
-import "../interfaces/IMessage.sol";
-import {IJushin} from "../interfaces/IJushin.sol";
+import {Message} from "../../hashi/packages/evm/contracts/interfaces/IMessage.sol";
+import {IJushin} from  "../../hashi/packages/evm/contracts/interfaces/IJushin.sol";
 
 contract MockYaru {
     uint256 public immutable SOURCE_CHAIN_ID;

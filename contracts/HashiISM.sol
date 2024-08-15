@@ -5,8 +5,8 @@ import {Mailbox} from "@hyperlane-xyz/core/contracts/Mailbox.sol";
 import {IInterchainSecurityModule} from "@hyperlane-xyz/core/contracts/interfaces/IInterchainSecurityModule.sol";
 
 import {HashiManager} from "./HashiManager.sol";
-import {IJushin} from "./interfaces/IJushin.sol";
-
+import {IJushin} from "../hashi/packages/evm/contracts/interfaces/IJushin.sol";
+import { IAdapter } from "../hashi/packages/evm/contracts/interfaces/IAdapter.sol";
 /// @title Hashi ISM (Interchain Security Module)
 /// @author zeng
 /// @dev Inherit security logic from Hashi
@@ -29,7 +29,7 @@ contract HashiISM is IJushin, IInterchainSecurityModule {
         uint256 sourceChainId,
         address sender,
         uint256 threshold,
-        address[] calldata adapters,
+        IAdapter[] calldata adapters,
         bytes calldata data
     ) external returns (bytes memory) {
         _validateHashiMessage(sourceChainId, threshold, sender, adapters);
@@ -45,7 +45,7 @@ contract HashiISM is IJushin, IInterchainSecurityModule {
         uint256 chainId,
         uint256 threshold,
         address sender,
-        address[] calldata adapters
+        IAdapter[] calldata adapters
     ) internal view{
         require(
             HASHI_IS_ENABLED &&

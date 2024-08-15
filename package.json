@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
+    "postinstall": "patch-package",
     "prettier": "prettier --write --plugin=prettier-plugin-solidity 'contracts/**/*.sol'"
   },
   "devDependencies": {
@@ -33,5 +34,6 @@
     "@hyperlane-xyz/sdk": "4.0.0",
     "@openzeppelin/contracts": "4.9.6",
     "solidity-rlp": "2.0.8"
-  }
+  },
+  "packageManager": "yarn@1.22.19+sha512.ff4579ab459bb25aa7c0ff75b62acebe576f6084b36aa842971cf250a5d8c6cd3bc9420b22ce63c7f93a0857bc6ef29291db39c3e7a23aab5adfd5a4dd6c5d71"
 }
