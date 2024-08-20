@@ -47,15 +47,11 @@ contract HashiISM is IJushin, IInterchainSecurityModule {
         address sender,
         IAdapter[] calldata adapters
     ) internal view{
-        require(
-            HASHI_IS_ENABLED &&
-                msg.sender == hashiManager.getYaru() &&
-                chainId == hashiManager.getTargetChainID() &&
-                sender == hashiManager.getTargetAddress() &&
-                threshold == hashiManager.getExpectedThreshold() &&
-                keccak256(abi.encodePacked(adapters)) ==
-                hashiManager.getExpectedAdaptersHash()
-        , "Invalid Hashi Message");
+        require(msg.sender == hashiManager.getYaru(), "msg Sender is not Yaru");
+        require( chainId == hashiManager.getTargetChainID(), "Incorrect chainID");
+        require(sender == hashiManager.getTargetAddress(), "Incorrect Sender");
+        require(threshold == hashiManager.getExpectedThreshold(), "Incorrect threshold");
+        require(keccak256(abi.encodePacked(adapters)) == hashiManager.getExpectedAdaptersHash(), "Incorrect adapters");
     }
 
     function _setHashiApprovalForMessage(

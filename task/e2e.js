@@ -34,7 +34,7 @@ task("lukso:e2e").setAction(async (_taskArgs, hre) => {
   // const hashiFactoryM = await ethers.getContractFactory("Hashi");
   // const hashiM = await hashiFactoryM.deploy();
 
-  const yahoFactoryM = await ethers.getContractFactory("Yaho");
+  const yahoFactoryM = await ethers.getContractFactory("MockYaho");
   const yahoM = await yahoFactoryM.deploy();
 
   const yaruFactoryM = await ethers.getContractFactory("MockYaru");
@@ -159,6 +159,8 @@ task("lukso:e2e").setAction(async (_taskArgs, hre) => {
     await mockAdapterM2.getAddress(),
   ]);
 
+  await hashiManagerM.setExpectedThreshold(HASHI_THRESHOLD);
+
   await hashiManagerM.setTargetAddress(await hashiHookL.getAddress());
 
   await hashiManagerM.setYaru(await yaruM.getAddress());
@@ -185,6 +187,9 @@ task("lukso:e2e").setAction(async (_taskArgs, hre) => {
     await mockAdapterL1.getAddress(),
     await mockAdapterL2.getAddress(),
   ]);
+
+  await hashiManagerL.setExpectedThreshold(HASHI_THRESHOLD);
+
   await hashiManagerL.setTargetChainId(SOURCE_CHAIN_ID);
 
   await hashiManagerL.setTargetAddress(await hashiHookM.getAddress());
