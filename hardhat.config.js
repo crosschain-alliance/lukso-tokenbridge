@@ -3,6 +3,7 @@ require("hardhat-tracer");
 require("./task/e2e");
 require("./task/pingpong");
 require("hardhat-change-network");
+require("dotenv").config();
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
@@ -16,11 +17,13 @@ module.exports = {
     sepolia: {
       url: process.env.SEPOLIA_RPC_URL,
       accounts: [process.env.PRIVATE_KEY],
+      chainId: 11155111,
     },
 
     lukso: {
       url: "https://rpc.testnet.lukso.network",
       accounts: [process.env.PRIVATE_KEY],
+      chainId: 4201,
     },
     // fmainnet: {
     //   url: "http://127.0.0.1:8545",

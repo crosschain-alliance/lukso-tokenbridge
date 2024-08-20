@@ -56,8 +56,8 @@ task("pingpong").setAction(async (_taskArgs, hre) => {
     receipt,
   });
 
-  await hre.changeNetwork("flukso");
-  //   await hre.changeNetwork("lukso");
+  // await hre.changeNetwork("flukso");
+  await hre.changeNetwork("lukso");
 
   console.log("Switching to lukso");
 
@@ -112,18 +112,15 @@ task("pingpong").setAction(async (_taskArgs, hre) => {
 
   console.log("Sepolia -> LUKSO testnet done");
 
-  await hre.changeNetwork("lukso");
-
   let pingLukso = await ethers.getContractAt("PingPong", PING_LUKSO);
   console.log("ping from LUKSO testnet");
   tx = await pingLukso
-    .connect(signers[0])
+    .connect(luksoSigners[0])
     .ping([MOCK_REPORTER_LUKSO], [MOCK_ADAPTER_SEPOLIA]);
 
   console.log("Ping tx ", tx.hash);
 
   receipt = await tx.wait(1);
-  console.log("receipt ", receipt);
 
   let {
     hashiMessage: hashiMessage2,
@@ -133,8 +130,8 @@ task("pingpong").setAction(async (_taskArgs, hre) => {
     receipt,
   });
 
-  await hre.changeNetwork("fsepolia");
-  //   await hre.changeNetwork("sepolia");
+  // await hre.changeNetwork("fsepolia");
+  await hre.changeNetwork("sepolia");
 
   console.log("Switching to Sepolia");
 
