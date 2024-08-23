@@ -165,21 +165,32 @@ describe("Aggregation ISM should work", function () {
       .to.emit(hashiISM, "ApprovedByHashi")
       .withArgs(hashMsg, true);
 
-    // TODO: fix metadata error
-    // expect(await mailbox.process("0x00", hyperlaneMessage))
-    //   .to.emit(mailbox, "Process")
-    //   .withArgs(
-    //     SOURCE_CHAIN_ID,
-    //     addressToBytes32(owner.address.toString()),
-    //     mockMessage
+    expect(
+      await mailbox.process(
+        "0x00000001000000020000000300000004",
+        hyperlaneMessage
+      )
+    )
+      .to.emit(mailbox, "Process")
+      .withArgs(
+        SOURCE_CHAIN_ID,
+        addressToBytes32(owner.address.toString()),
+        mockMessage
+      )
+      .to.emit(mailbox, "ProcessId")
+      .withArgs(hashMsg)
+      .to.emit(mockRecipient, "HandledByRecipient")
+      .withArgs(
+        SOURCE_CHAIN_ID,
+        addressToBytes32(owner.address.toString()),
+        mockMessage
+      );
+
+    // expect(
+    //   await mailbox.process(
+    //     "0x00000001000000020000000300000004",
+    //     hyperlaneMessage
     //   )
-    //   .to.emit(mailbox, "ProcessId")
-    //   .withArgs(hashMsg)
-    //   .to.emit(mockRecipient, "HandledByRecipient")
-    //   .withArgs(
-    //     SOURCE_CHAIN_ID,
-    //     addressToBytes32(owner.address.toString()),
-    //     mockMessage
-    //   );
+    // ).to.be.revertedWithCustomError("Mailbox: already delivered");
   });
 });
