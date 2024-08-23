@@ -19,7 +19,7 @@
 
 **LUKSO**
 
-1. When Mailbox.process() is called, it will check with Multisig ISM (includes Hashi ISM), whether the message is signed by validators & verified by Hashi ISM. If so, it will mint hypERC20 token to the receiver.
+1. When Mailbox.process() is called, it will check with Aggregation ISM (aggregate result from Multisig ISM and Hashi ISM), whether the message is signed by validators & verified by Hashi ISM. If so, it will mint hypERC20 token to the receiver.
 2. For compatibility, LSP7 wrapper need to be created to mint LSP7 token to the user.
 
 ## Workflow ( LUKSO → Ethereum)
@@ -28,7 +28,7 @@
 
 **LUKSO**
 
-1. User transfer LSP7 token to HypERC20 contract and the token is burn.
+1. User transfer LSP7 token to HypERC20 contract and the token is locked.
 2. HypERC20 contract call Mailbox to pass the message.
 3. Mailbox call Default Hook (created by Hyperlane) and Hashi Hook (created by CCIA team).
 4. Hashi Hook dispatch the token relaying message from Yaho contracts.
@@ -39,7 +39,7 @@
 
 **Ethereum**
 
-1. When Mailbox.process() is called, it will check with Multisig ISM (includes Hashi ISM), whether the message is signed by validators & verified by Hashi ISM. If so, it will unlock ERC20 token to the receiver.
+1. When Mailbox.process() is called, it will check with Aggregation ISM (aggregate result from Multisig ISM and Hashi ISM), whether the message is signed by validators & verified by Hashi ISM. If so, it will unlock ERC20 token to the receiver.
 
 ## Reference
 
