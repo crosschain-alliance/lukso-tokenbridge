@@ -57,3 +57,9 @@
 ### LUKSO
 
 1. LSP7: https://docs.lukso.tech/standards/tokens/LSP7-Digital-Asset/
+2. HypLSP7: https://github.com/lukso-network/lsp-bridge-HypLSP7/blob/main/README.md
+
+### Testing
+
+1. Overview: https://hackmd.io/hMZGG8AQSAqOYOg9dHDTdw?view
+2. Setting up the test & infrastructure: https://hackmd.io/@-adIpdkCSKa4XOtLHg41Kw/BkCp4xt_1e

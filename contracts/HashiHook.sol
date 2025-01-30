@@ -12,9 +12,13 @@ import { IReporter } from "../hashi/packages/evm/contracts/interfaces/IReporter.
 import {IYaho} from "../hashi/packages/evm/contracts/interfaces/IYaho.sol";
 import {HashiManager} from "./HashiManager.sol";
 
+/// @title Hashi Hook
+/// @author CCIA
+/// @dev Post dispatch logic from Hashi
 contract HashiHook is AbstractPostDispatchHook, Ownable {
     using Message for bytes;
     using TypeCasts for bytes32;
+
 
     address public mailbox;
     address public hashiISM;
@@ -27,11 +31,27 @@ contract HashiHook is AbstractPostDispatchHook, Ownable {
     }
 
     /// @notice set new mailbox address
-    /// @param newMailBox new mail box address
-    function setMailbox(address newMailBox) external onlyOwner {
-        require(newMailBox != address(0), "Invalid Mailbox address");
-        mailbox = newMailBox;
+    /// @param _mailBox new mail box address
+    function setMailbox(address _mailBox) external onlyOwner {
+        require(_mailBox != address(0), "Invalid Mailbox address");
+        mailbox = _mailBox;
     }
+
+    /// @notice set new Hashi ISM address
+    /// @param _hashiISM new hashiISM address 
+    function setHashiISM(address _hashiISM) external onlyOwner {
+        require(_hashiISM != address(0), "Invalid Hashi ISM address");
+        hashiISM = _hashiISM;
+    }
+
+    /// @notice set new hashi manager address
+    /// @param _hashiManager new _hashiManager address
+    function setHashiManager(address _hashiManager) external onlyOwner{
+        require(_hashiManager!= address(0), "Invalid Hashi Manager address");
+        hashiManager = HashiManager(_hashiManager);
+    }
+    
+
 
     /// @inheritdoc IPostDispatchHook
     function hookType() external pure override returns (uint8) {
@@ -45,6 +65,8 @@ contract HashiHook is AbstractPostDispatchHook, Ownable {
         bytes calldata /*metadata*/,
         bytes calldata message
     ) internal override {
+        // notice: in production, msg.sender is staticAggregationHook contract
+        // the mailbox address is set to staticAggregationHook contract
         require(msg.sender == mailbox, "Only called by Mailbox");
 
         address[] memory hashiReporter = hashiManager.getReporters();
@@ -52,8 +74,8 @@ contract HashiHook is AbstractPostDispatchHook, Ownable {
         IReporter[] memory reporters = new IReporter[](hashiReporter.length);
         IAdapter[] memory adapters = new IAdapter[](hashiAdapter.length);
         for (uint256 i = 0; i < reporters.length; i++) {
-            reporters[i] = IReporter(reporters[i]);
-            adapters[i] = IAdapter(adapters[i]);
+            reporters[i] = IReporter(hashiReporter[i]);
+            adapters[i] = IAdapter(hashiAdapter[i]);
         }
      
         require(hashiReporter.length > 0, "invalid reporter length");
@@ -77,7 +99,6 @@ contract HashiHook is AbstractPostDispatchHook, Ownable {
         bytes calldata /*metadata*/,
         bytes calldata message
     ) internal view override returns (uint256) {
-        // TODO
         return 0;
     }
 }

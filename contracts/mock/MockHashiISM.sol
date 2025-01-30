@@ -4,25 +4,23 @@ pragma solidity ^0.8.0;
 import {Mailbox} from "@hyperlane-xyz/core/contracts/Mailbox.sol";
 import {IInterchainSecurityModule} from "@hyperlane-xyz/core/contracts/interfaces/IInterchainSecurityModule.sol";
 
-import {HashiManager} from "./HashiManager.sol";
-import {IJushin} from "../hashi/packages/evm/contracts/interfaces/IJushin.sol";
-import { IAdapter } from "../hashi/packages/evm/contracts/interfaces/IAdapter.sol";
+import {HashiManager} from "../HashiManager.sol";
+import {IJushin} from "../../hashi/packages/evm/contracts/interfaces/IJushin.sol";
+import { IAdapter } from "../../hashi/packages/evm/contracts/interfaces/IAdapter.sol";
 /// @title Hashi ISM (Interchain Security Module)
-/// @author CCIA
+/// @author cross-chain alliance
 /// @dev Inherit security logic from Hashi
-contract HashiISM is IJushin, IInterchainSecurityModule{
+contract MockHashiISM is IJushin, IInterchainSecurityModule {
     bool public constant HASHI_IS_ENABLED = true;
     HashiManager hashiManager;
 
     mapping(bytes32 hashMsg => bool isApproved) isApprovedByHashi;
-
+    event isMessageApprovedByHashi(bool indexed isApprovedByHashi, bytes32 indexed messageId, bytes message);
     event ApprovedByHashi(bytes32 indexed hashMsg, bool indexed isApproved);
 
     constructor(address hashiManager_) {
         hashiManager = HashiManager(hashiManager_);
     }
-
-    
 
     /// @inheritdoc IJushin
     /// @notice called by Yaru during execute messages
@@ -72,12 +70,9 @@ contract HashiISM is IJushin, IInterchainSecurityModule{
         bytes calldata _message
     ) external returns (bool) {
         bytes32 hashMsg = keccak256(abi.encodePacked(_message));
-        require(
-            isApprovedByHashi[
-                keccak256(abi.encodePacked("messagesApprovedByHashi", hashMsg))
-            ],
-            "Message is not approved by Hashi"
-        );
+      // in Mock Hashi ISM, it will not revert
+        bool isApproved = isApprovedByHashi[keccak256(abi.encodePacked("messagesApprovedByHashi", hashMsg))];
+        emit isMessageApprovedByHashi(isApproved, keccak256(abi.encodePacked("messagesApprovedByHashi", hashMsg)), _message);
         return true;
     }
 

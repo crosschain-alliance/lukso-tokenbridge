@@ -5,12 +5,13 @@ import { AbstractAggregationIsm } from "@hyperlane-xyz/core/contracts/isms/aggre
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
 /// @title AggregationISM for Hashi ISM as one of the required ISM
-/// @author zeng
+/// @author CCIA
 /// @dev https://docs.hyperlane.xyz/docs/reference/ISM/aggregation-ISM-interface
 contract AggregationISM is AbstractAggregationIsm, Ownable {
 
     address public hashiISM;
     address public multisigISM;
+    address public defaultISM;
     uint8 public threshold;
 
     /// @inheritdoc AbstractAggregationIsm
@@ -29,6 +30,7 @@ contract AggregationISM is AbstractAggregationIsm, Ownable {
         require(threshold <= isms.length, "invalid threshold");
         hashiISM = isms[0];
         multisigISM = isms[1];
+        defaultISM = isms[2];
         threshold = threshold_;
     }
 }

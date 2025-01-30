@@ -1,3 +1,6 @@
 [submodule "hashi"]
     path = hashi
     url = https://github.com/gnosis/hashi
+[submodule "lsp-bridge-HypLSP7"]
+	path = lsp-bridge-HypLSP7
+	url = https://github.com/lukso-network/lsp-bridge-HypLSP7

@@ -38,6 +38,17 @@ describe("Dispatching Message from Source Chain", function () {
     const yahoFactory = await ethers.getContractFactory("MockYaho");
     const yaho = await yahoFactory.deploy();
 
+    const mockERC20Factory = await ethers.getContractFactory("MockERC20");
+    const mockERC20 = await mockERC20Factory.deploy();
+
+    const mockHypERC20CollateralFactory = await ethers.getContractFactory(
+      "MockHypERC20Collateral"
+    );
+    const MockHypERC20Collateral = await mockHypERC20CollateralFactory(
+      await mockERC20.getAddress(),
+      await mailBox.getAddress()
+    );
+
     const hyperlaneMessage = getHyperlaneMessage({
       nonce: HYP_NONCE,
       originDomain: SOURCE_CHAIN_ID,
@@ -107,22 +118,21 @@ describe("Dispatching Message from Source Chain", function () {
       HASHI_THRESHOLD
     );
     await hashiManager.setTargetChainId(DESTINATION_CHAIN_ID);
-
-    // await expect(
-    //   await mailBox.dispatch(
-    //     DESTINATION_CHAIN_ID, // destination domain
-    //     addressToBytes32(owner.address), // recipient
-    //     mockMessage
-    //   )
-    // )
-    //   .to.emit(mailBox, "Dispatch")
-    //   .withArgs(
-    //     owner.address,
-    //     DESTINATION_CHAIN_ID,
-    //     addressToBytes32(owner.address),
-    //     hyperlaneMessage
-    //   )
-    //   .to.emit(yaho, "MessageDispatched")
-    //   .withArgs(HASHI_MESSAGE_ID, hashiMessage);
+    await expect(
+      await mailBox.dispatch(
+        DESTINATION_CHAIN_ID, // destination domain
+        addressToBytes32(owner.address), // recipient
+        mockMessage
+      )
+    )
+      .to.emit(mailBox, "Dispatch")
+      .withArgs(
+        owner.address,
+        DESTINATION_CHAIN_ID,
+        addressToBytes32(owner.address),
+        hyperlaneMessage
+      )
+      .to.emit(yaho, "MessageDispatched")
+      .withArgs(HASHI_MESSAGE_ID, hashiMessage);
   });
 });
