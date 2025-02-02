@@ -5,7 +5,7 @@ require("@nomicfoundation/hardhat-toolbox/network-helpers");
 const {
   getRelevantDataFromEvents,
   decodeHashiMessage,
-} = require("./utils/index");
+} = require("../utils/index");
 
 // To run the task
 // 1. Create fork for Sepolia: yarn hardhat node --fork https://rpc.sepolia.org

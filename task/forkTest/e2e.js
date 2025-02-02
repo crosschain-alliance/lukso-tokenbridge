@@ -1,12 +1,12 @@
 const { task } = require("hardhat/config");
 require("@nomicfoundation/hardhat-toolbox/network-helpers");
-const { addressToBytes32, getHyperlaneMessage } = require("../test/utils");
+const { addressToBytes32, getHyperlaneMessage } = require("../../test/utils");
 
 const {
   getMessageFromDispatch,
   getMessageFromYaru,
   getMessageFromProcess,
-} = require("./utils/index");
+} = require("../utils/index");
 
 // To run the task
 // 1. Create fork for mainnet: yarn hardhat node --fork https://eth.llamarpc.com

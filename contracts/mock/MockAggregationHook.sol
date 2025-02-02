@@ -2,19 +2,15 @@
 pragma solidity ^0.8.0;
 
 import {IPostDispatchHook} from "@hyperlane-xyz/core/contracts/interfaces/hooks/IPostDispatchHook.sol";
-import { AbstractPostDispatchHook } from "@hyperlane-xyz/core/contracts/hooks/libs/AbstractPostDispatchHook.sol";
+import {AbstractPostDispatchHook} from "@hyperlane-xyz/core/contracts/hooks/libs/AbstractPostDispatchHook.sol";
 
 contract MockStaticAggregationHook is AbstractPostDispatchHook {
-
-
     address[] public aggregationHooks;
 
-
-    constructor(address[] memory hooks_){
-        for(uint256 i = 0; i< hooks_.length; i++){
+    constructor(address[] memory hooks_) {
+        for (uint256 i = 0; i < hooks_.length; i++) {
             aggregationHooks[i] = hooks_[i];
         }
-        
     }
 
     function hookType() external pure override returns (uint8) {
@@ -58,13 +54,9 @@ contract MockStaticAggregationHook is AbstractPostDispatchHook {
         return total;
     }
 
-
     // Replace the hooks() of original StaticAggregationHook.sol with setter and gettter functioin instead of MetaProxy standard
     function hooks(bytes calldata) public view returns (address[] memory) {
         return aggregationHooks;
         // return abi.decode(MetaProxy.metadata(), (address[]));
-    } 
-
-
-
+    }
 }

@@ -1,24 +1,18 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
 pragma solidity ^0.8.0;
 
-import { AbstractMultisigIsm } from "@hyperlane-xyz/core/contracts/isms/multisig/AbstractMultisigIsm.sol";
+import {AbstractMultisigIsm} from "@hyperlane-xyz/core/contracts/isms/multisig/AbstractMultisigIsm.sol";
 
 abstract contract MockMulitisigISM is AbstractMultisigIsm {
-
-    // TODO: need to inherit either MerkleRoot or MessageId ISM
 
     address[] public validators;
     uint8 public threshold;
 
     event ValidatorsAndThresholdSet(address[] validators, uint8 threshold);
 
-    constructor(
-        address[] memory _validators,
-        uint8 _threshold
-    ) {
+    constructor(address[] memory _validators, uint8 _threshold) {
         validators = _validators;
         threshold = _threshold;
-
     }
 
     function setValidatorsAndThreshold(
@@ -40,15 +34,14 @@ abstract contract MockMulitisigISM is AbstractMultisigIsm {
         return (validators, threshold);
     }
 
+    // Virtual function from either Merkle tree or MessageId
 
-
-    // Virtual function from either Merkle tree or MessageId 
-   
     function digest(
         bytes calldata _metadata,
         bytes calldata _message
     ) internal pure override returns (bytes32) {
-        return hex'0000000000000000000000000000000000000000000000000000000000000000';
+        return
+            hex"0000000000000000000000000000000000000000000000000000000000000000";
         // return
         //     CheckpointLib.digest(
         //         _message.origin(),
@@ -59,7 +52,6 @@ abstract contract MockMulitisigISM is AbstractMultisigIsm {
         //     );
     }
 
-   
     function signatureAt(
         bytes calldata _metadata,
         uint256 _index
@@ -68,10 +60,9 @@ abstract contract MockMulitisigISM is AbstractMultisigIsm {
         return _metadata;
     }
 
-   
     function signatureCount(
         bytes calldata _metadata
-    ) public pure  returns (uint256) {
+    ) public pure returns (uint256) {
         // return _metadata.signatureCount();
         return 1;
     }

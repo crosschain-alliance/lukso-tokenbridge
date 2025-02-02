@@ -174,11 +174,7 @@ task("deploy:HashiHook")
   .addParam("hashiism")
   .setAction(async function (taskArguments, hre) {
     console.log("Deploying Hashi Hook");
-    console.log(
-      taskArguments.mailbox,
-      taskArguments.hashimanager,
-      taskArguments.hashiism
-    );
+
     const signers = await hre.ethers.getSigners();
     const hashiHookFactory = await hre.ethers.getContractFactory("HashiHook");
     const hashiHook = await hashiHookFactory
@@ -201,8 +197,8 @@ task("deploy:HashiHook")
     });
   });
 
-task("deploy:ERC20").setAction(async function (taskArguments, hre) {
-  console.log("Deploying ERC20...");
+task("deploy:MockERC20").setAction(async function (taskArguments, hre) {
+  console.log("Deploying Mock ERC20...");
   const signers = await hre.ethers.getSigners();
   const erc20Factory = await hre.ethers.getContractFactory("MockERC20");
   const erc20 = await erc20Factory.connect(signers[0]).deploy();
@@ -214,23 +210,26 @@ task("deploy:ERC20").setAction(async function (taskArguments, hre) {
   });
 });
 
-task("deploy:HypERC20").setAction(async function (taskArguments, hre) {
-  console.log("Deploying HypERC20...");
-  const signers = await hre.ethers.getSigners();
-  const hypERC20Factory = await hre.ethers.getContractFactory("HypERC20");
-  const hypERC20 = await hypERC20Factory
-    .connect(signers[0])
-    .deploy(18, "0x2f2aFaE1139Ce54feFC03593FeE8AB2aDF4a85A7");
+task("deploy:HypERC20")
+  .addParam("decimal")
+  .addParam("mailbox")
+  .setAction(async function (taskArguments, hre) {
+    console.log("Deploying HypERC20...");
+    const signers = await hre.ethers.getSigners();
+    const hypERC20Factory = await hre.ethers.getContractFactory("HypERC20");
+    const hypERC20 = await hypERC20Factory
+      .connect(signers[0])
+      .deploy(taskArguments.decimal, taskArguments.mailbox);
 
-  console.log("hyperc20 ", await hypERC20.getAddress());
-  await hre.run("verify:verify", {
-    address: await hypERC20.getAddress(),
-    constructor: [18, "0x2f2aFaE1139Ce54feFC03593FeE8AB2aDF4a85A7"],
+    console.log("hyperc20 ", await hypERC20.getAddress());
+    await hre.run("verify:verify", {
+      address: await hypERC20.getAddress(),
+      constructor: [taskArguments.decimal, taskArguments.mailbox],
+    });
   });
-});
 
 task("deploy:MockHook").setAction(async function (taskArguments, hre) {
-  console.log("Deploying MokcHOOk");
+  console.log("Deploying MockHook");
   const signers = await hre.ethers.getSigners();
 
   const mockHookFactory = await hre.ethers.getContractFactory("MockHook");
@@ -272,5 +271,5 @@ task("deploy:MerkleRootMultisigISM")
       taskArguments.threshold
     );
 
-    console.log("deploy tx ", tx.hash);
+    console.log("MerkleRootMultisigISM deploy tx ", tx.hash);
   });

@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: LGPL-3.0-only
 pragma solidity ^0.8.20;
 
-import { IJushin } from "../../hashi/packages/evm/contracts/interfaces/IJushin.sol";
-import { IAdapter } from "../../hashi/packages/evm/contracts/interfaces/IAdapter.sol";
-import { IReporter } from "../../hashi/packages/evm/contracts/interfaces/IReporter.sol";
-import { IYaho } from "../../hashi/packages/evm/contracts/interfaces/IYaho.sol";
+import {IJushin} from "../../hashi/packages/evm/contracts/interfaces/IJushin.sol";
+import {IAdapter} from "../../hashi/packages/evm/contracts/interfaces/IAdapter.sol";
+import {IReporter} from "../../hashi/packages/evm/contracts/interfaces/IReporter.sol";
+import {IYaho} from "../../hashi/packages/evm/contracts/interfaces/IYaho.sol";
 
 contract PingPong is IJushin {
     uint256 public count;
@@ -58,6 +58,4 @@ contract PingPong is IJushin {
         emit Pong(count);
         return abi.encode(0);
     }
-
-
 }

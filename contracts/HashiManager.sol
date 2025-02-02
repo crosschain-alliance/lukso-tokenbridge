@@ -4,6 +4,9 @@ pragma solidity ^0.8.0;
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {SafeMath} from "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
+/// @title Hashi Manager
+/// @author Cross-Chain Alliance
+/// @dev Manager contract for Hashi reporters and adapters
 contract HashiManager is Ownable {
     address[] adapters;
     address[] reporters;

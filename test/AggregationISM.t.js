@@ -5,6 +5,7 @@ const { ethers } = require("hardhat");
 const { expect } = require("chai");
 const { getHyperlaneMessage, addressToBytes32 } = require("./utils");
 
+// Dev: In production, StaticAggregationISM (deployed using Hyperlane's StaticAggregationISMFactory) is used instead of AggregatonISM in contracts/AggregationISM.sol
 describe("Aggregation ISM should work", function () {
   const SOURCE_CHAIN_ID = 100;
   const DESTINATION_CHAIN_ID = 200;

@@ -7,18 +7,17 @@ import {Message} from "@hyperlane-xyz/core/contracts/libs/Message.sol";
 import {TypeCasts} from "@hyperlane-xyz/core/contracts/libs/TypeCasts.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
-import { IAdapter } from "../hashi/packages/evm/contracts/interfaces/IAdapter.sol";
-import { IReporter } from "../hashi/packages/evm/contracts/interfaces/IReporter.sol";
+import {IAdapter} from "../hashi/packages/evm/contracts/interfaces/IAdapter.sol";
+import {IReporter} from "../hashi/packages/evm/contracts/interfaces/IReporter.sol";
 import {IYaho} from "../hashi/packages/evm/contracts/interfaces/IYaho.sol";
 import {HashiManager} from "./HashiManager.sol";
 
 /// @title Hashi Hook
-/// @author CCIA
+/// @author Cross-Chain Alliance
 /// @dev Post dispatch logic from Hashi
 contract HashiHook is AbstractPostDispatchHook, Ownable {
     using Message for bytes;
     using TypeCasts for bytes32;
-
 
     address public mailbox;
     address public hashiISM;
@@ -38,7 +37,7 @@ contract HashiHook is AbstractPostDispatchHook, Ownable {
     }
 
     /// @notice set new Hashi ISM address
-    /// @param _hashiISM new hashiISM address 
+    /// @param _hashiISM new hashiISM address
     function setHashiISM(address _hashiISM) external onlyOwner {
         require(_hashiISM != address(0), "Invalid Hashi ISM address");
         hashiISM = _hashiISM;
@@ -46,12 +45,10 @@ contract HashiHook is AbstractPostDispatchHook, Ownable {
 
     /// @notice set new hashi manager address
     /// @param _hashiManager new _hashiManager address
-    function setHashiManager(address _hashiManager) external onlyOwner{
-        require(_hashiManager!= address(0), "Invalid Hashi Manager address");
+    function setHashiManager(address _hashiManager) external onlyOwner {
+        require(_hashiManager != address(0), "Invalid Hashi Manager address");
         hashiManager = HashiManager(_hashiManager);
     }
-    
-
 
     /// @inheritdoc IPostDispatchHook
     function hookType() external pure override returns (uint8) {
@@ -77,7 +74,7 @@ contract HashiHook is AbstractPostDispatchHook, Ownable {
             reporters[i] = IReporter(hashiReporter[i]);
             adapters[i] = IAdapter(hashiAdapter[i]);
         }
-     
+
         require(hashiReporter.length > 0, "invalid reporter length");
         require(hashiAdapter.length > 0, "invalid adapter length");
 

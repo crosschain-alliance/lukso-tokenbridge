@@ -107,22 +107,21 @@ describe("Dispatching Message from Source Chain", function () {
       HASHI_THRESHOLD
     );
     await hashiManager.setTargetChainId(DESTINATION_CHAIN_ID);
-
-    // await expect(
-    //   await mailBox.dispatch(
-    //     DESTINATION_CHAIN_ID, // destination domain
-    //     addressToBytes32(owner.address), // recipient
-    //     mockMessage
-    //   )
-    // )
-    //   .to.emit(mailBox, "Dispatch")
-    //   .withArgs(
-    //     owner.address,
-    //     DESTINATION_CHAIN_ID,
-    //     addressToBytes32(owner.address),
-    //     hyperlaneMessage
-    //   )
-    //   .to.emit(yaho, "MessageDispatched")
-    //   .withArgs(HASHI_MESSAGE_ID, hashiMessage);
+    await expect(
+      await mailBox.dispatch(
+        DESTINATION_CHAIN_ID, // destination domain
+        addressToBytes32(owner.address), // recipient
+        mockMessage
+      )
+    )
+      .to.emit(mailBox, "Dispatch")
+      .withArgs(
+        owner.address,
+        DESTINATION_CHAIN_ID,
+        addressToBytes32(owner.address),
+        hyperlaneMessage
+      )
+      .to.emit(yaho, "MessageDispatched")
+      .withArgs(HASHI_MESSAGE_ID, hashiMessage);
   });
 });

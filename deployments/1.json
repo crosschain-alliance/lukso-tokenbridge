@@ -1,0 +1,18 @@
+{
+    "chainId": 1,
+    "mailbox": "0xc005dc82818d67AF737725bD4bf75435d065D239",
+    "staticAggregationHookFactory": "0x6D2555A8ba483CcF4409C39013F5e9a3285D3C9E",
+    "staticAggregationISMFactory": "0x46FA191Ad972D9674Ed752B69f9659A0d7b22846",
+    "staticMerkleRootMultisigIsmFactory": "0x47e8aF9e30C32Ab91060ED587894288786761B45",
+    "staticAggregationHook": "0xc86e4aee5aedf687e3429068ea7a61f4d233aa15",
+    "staticAggregationISM": "0x10c82311163218d6ec8cfb42a6441f1794b5b579",
+    "merkleRootMultisigISM": "0x65b9b2ad51e38cdc8e62dd0c3c19995267dc177c",
+    "yaho": "0xbAE4Ebbf42815BB9Bc3720267Ea4496277d60DB8",
+    "yaru": 
+    {
+        "lukso": "0x3f94989763A27CAeAF1f7aEF4Df2752CD5B58a5A"
+    },
+    "hashiHook": "0xfd806f2DD9D744b2Db4ACb0DF7F9148DD7442AE0",
+    "hashiISM": "0x54F42816229F0022c2EcD4d05c9f823a9d7F3093",
+    "hashiManager": "0xa1836695013CE41C487a6DbDD0AB137dB603f036"
+}

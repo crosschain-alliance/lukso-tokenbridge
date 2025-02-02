@@ -6,16 +6,20 @@ import {IInterchainSecurityModule} from "@hyperlane-xyz/core/contracts/interface
 
 import {HashiManager} from "../HashiManager.sol";
 import {IJushin} from "../../hashi/packages/evm/contracts/interfaces/IJushin.sol";
-import { IAdapter } from "../../hashi/packages/evm/contracts/interfaces/IAdapter.sol";
+import {IAdapter} from "../../hashi/packages/evm/contracts/interfaces/IAdapter.sol";
 /// @title Hashi ISM (Interchain Security Module)
-/// @author cross-chain alliance
+/// @author Cross-Chain Alliance
 /// @dev Inherit security logic from Hashi
 contract MockHashiISM is IJushin, IInterchainSecurityModule {
     bool public constant HASHI_IS_ENABLED = true;
     HashiManager hashiManager;
 
     mapping(bytes32 hashMsg => bool isApproved) isApprovedByHashi;
-    event isMessageApprovedByHashi(bool indexed isApprovedByHashi, bytes32 indexed messageId, bytes message);
+    event isMessageApprovedByHashi(
+        bool indexed isApprovedByHashi,
+        bytes32 indexed messageId,
+        bytes message
+    );
     event ApprovedByHashi(bytes32 indexed hashMsg, bool indexed isApproved);
 
     constructor(address hashiManager_) {
@@ -46,12 +50,22 @@ contract MockHashiISM is IJushin, IInterchainSecurityModule {
         uint256 threshold,
         address sender,
         IAdapter[] calldata adapters
-    ) internal view{
+    ) internal view {
         require(msg.sender == hashiManager.getYaru(), "msg Sender is not Yaru");
-        require( chainId == hashiManager.getTargetChainID(), "Incorrect chainID");
+        require(
+            chainId == hashiManager.getTargetChainID(),
+            "Incorrect chainID"
+        );
         require(sender == hashiManager.getTargetAddress(), "Incorrect Sender");
-        require(threshold == hashiManager.getExpectedThreshold(), "Incorrect threshold");
-        require(keccak256(abi.encodePacked(adapters)) == hashiManager.getExpectedAdaptersHash(), "Incorrect adapters");
+        require(
+            threshold == hashiManager.getExpectedThreshold(),
+            "Incorrect threshold"
+        );
+        require(
+            keccak256(abi.encodePacked(adapters)) ==
+                hashiManager.getExpectedAdaptersHash(),
+            "Incorrect adapters"
+        );
     }
 
     function _setHashiApprovalForMessage(
@@ -70,14 +84,20 @@ contract MockHashiISM is IJushin, IInterchainSecurityModule {
         bytes calldata _message
     ) external returns (bool) {
         bytes32 hashMsg = keccak256(abi.encodePacked(_message));
-      // in Mock Hashi ISM, it will not revert
-        bool isApproved = isApprovedByHashi[keccak256(abi.encodePacked("messagesApprovedByHashi", hashMsg))];
-        emit isMessageApprovedByHashi(isApproved, keccak256(abi.encodePacked("messagesApprovedByHashi", hashMsg)), _message);
+        // in Mock Hashi ISM, it will not revert
+        bool isApproved = isApprovedByHashi[
+            keccak256(abi.encodePacked("messagesApprovedByHashi", hashMsg))
+        ];
+        emit isMessageApprovedByHashi(
+            isApproved,
+            keccak256(abi.encodePacked("messagesApprovedByHashi", hashMsg)),
+            _message
+        );
         return true;
     }
 
     /// @inheritdoc IInterchainSecurityModule
-    function moduleType() external view returns (uint8){
+    function moduleType() external view returns (uint8) {
         return uint8(Types.NULL);
     }
 }

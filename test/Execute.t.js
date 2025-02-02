@@ -157,7 +157,7 @@ describe("Execute Message", function () {
       [addressToBytes32(await mockRecipient.getAddress()), transferAmount]
     );
 
-    //  Hyperlane message for token minting
+    // Hyperlane message for token minting
     // origin domain = source domain
     // sender = bytes32 source hypERC20 Collateral address
     // message = ethers.solidityPacked( ["bytes32", "uint256"], [bytes32 receiver, transferAmount]);

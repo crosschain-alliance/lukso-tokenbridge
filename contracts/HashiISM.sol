@@ -6,11 +6,11 @@ import {IInterchainSecurityModule} from "@hyperlane-xyz/core/contracts/interface
 
 import {HashiManager} from "./HashiManager.sol";
 import {IJushin} from "../hashi/packages/evm/contracts/interfaces/IJushin.sol";
-import { IAdapter } from "../hashi/packages/evm/contracts/interfaces/IAdapter.sol";
+import {IAdapter} from "../hashi/packages/evm/contracts/interfaces/IAdapter.sol";
 /// @title Hashi ISM (Interchain Security Module)
-/// @author CCIA
+/// @author Cross-Chain Alliance
 /// @dev Inherit security logic from Hashi
-contract HashiISM is IJushin, IInterchainSecurityModule{
+contract HashiISM is IJushin, IInterchainSecurityModule {
     bool public constant HASHI_IS_ENABLED = true;
     HashiManager hashiManager;
 
@@ -21,8 +21,6 @@ contract HashiISM is IJushin, IInterchainSecurityModule{
     constructor(address hashiManager_) {
         hashiManager = HashiManager(hashiManager_);
     }
-
-    
 
     /// @inheritdoc IJushin
     /// @notice called by Yaru during execute messages
@@ -48,12 +46,22 @@ contract HashiISM is IJushin, IInterchainSecurityModule{
         uint256 threshold,
         address sender,
         IAdapter[] calldata adapters
-    ) internal view{
+    ) internal view {
         require(msg.sender == hashiManager.getYaru(), "msg Sender is not Yaru");
-        require( chainId == hashiManager.getTargetChainID(), "Incorrect chainID");
+        require(
+            chainId == hashiManager.getTargetChainID(),
+            "Incorrect chainID"
+        );
         require(sender == hashiManager.getTargetAddress(), "Incorrect Sender");
-        require(threshold == hashiManager.getExpectedThreshold(), "Incorrect threshold");
-        require(keccak256(abi.encodePacked(adapters)) == hashiManager.getExpectedAdaptersHash(), "Incorrect adapters");
+        require(
+            threshold == hashiManager.getExpectedThreshold(),
+            "Incorrect threshold"
+        );
+        require(
+            keccak256(abi.encodePacked(adapters)) ==
+                hashiManager.getExpectedAdaptersHash(),
+            "Incorrect adapters"
+        );
     }
 
     function _setHashiApprovalForMessage(
@@ -82,7 +90,7 @@ contract HashiISM is IJushin, IInterchainSecurityModule{
     }
 
     /// @inheritdoc IInterchainSecurityModule
-    function moduleType() external view returns (uint8){
+    function moduleType() external view returns (uint8) {
         return uint8(Types.NULL);
     }
 }
