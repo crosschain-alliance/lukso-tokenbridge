@@ -62,9 +62,6 @@ contract HashiHook is AbstractPostDispatchHook, Ownable {
         bytes calldata /*metadata*/,
         bytes calldata message
     ) internal override {
-        // notice: in production, msg.sender is staticAggregationHook contract
-        // the mailbox address is set to staticAggregationHook contract
-        require(msg.sender == mailbox, "Only called by Mailbox");
 
         address[] memory hashiReporter = hashiManager.getReporters();
         address[] memory hashiAdapter = hashiManager.getAdapters();
