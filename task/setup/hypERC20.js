@@ -45,7 +45,7 @@ task("setup:hypERC20")
 
     const hypERC20InitializeTx = await hypERC20.initialize(
       _taskArgs.totalsupply,
-      _taskArgs.tokenname, //
+      _taskArgs.tokenname,
       _taskArgs.tokensymbol,
       process.env[`${process.env.DESTINATION_CHAIN_ID}_STATIC_AGGREGATON_HOOK`], // Dev: need to check the newly created
       process.env[`${process.env.DESTINATION_CHAIN_ID}_STATIC_AGGREGATON_ISM`],

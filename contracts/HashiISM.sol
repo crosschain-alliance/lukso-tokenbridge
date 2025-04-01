@@ -7,6 +7,7 @@ import {IInterchainSecurityModule} from "@hyperlane-xyz/core/contracts/interface
 import {HashiManager} from "./HashiManager.sol";
 import {IJushin} from "../hashi/packages/evm/contracts/interfaces/IJushin.sol";
 import {IAdapter} from "../hashi/packages/evm/contracts/interfaces/IAdapter.sol";
+
 /// @title Hashi ISM (Interchain Security Module)
 /// @author Cross-Chain Alliance
 /// @dev Inherit security logic from Hashi

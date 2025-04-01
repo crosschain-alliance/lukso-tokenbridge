@@ -62,7 +62,6 @@ contract HashiHook is AbstractPostDispatchHook, Ownable {
         bytes calldata /*metadata*/,
         bytes calldata message
     ) internal override {
-
         address[] memory hashiReporter = hashiManager.getReporters();
         address[] memory hashiAdapter = hashiManager.getAdapters();
         IReporter[] memory reporters = new IReporter[](hashiReporter.length);

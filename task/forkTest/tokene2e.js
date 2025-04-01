@@ -1,19 +1,19 @@
 const { task } = require("hardhat/config");
 require("@nomicfoundation/hardhat-toolbox/network-helpers");
-const { addressToBytes32, getHyperlaneMessage } = require("../test/utils");
+const { addressToBytes32, getHyperlaneMessage } = require("../../test/utils");
 
 const {
   getMessageFromDispatch,
   getMessageFromYaru,
   getMessageFromProcess,
-} = require("./utils/index");
+} = require("../utils/index");
 
 // To run the task
 // 1. Create fork for mainnet: yarn hardhat node --fork https://eth.llamarpc.com
 // 2. Create fork for LUKSO: yarn hardhat node --fork https://rpc.lukso.sigmacore.io --port 8544
-// 3. yarn hardhat lukso:e2e --network fmainnet
+// 3. yarn hardhat lukso:e2e --network fethereum
 
-task("lukso:e2e").setAction(async (_taskArgs, hre) => {
+task("token:e2e").setAction(async (_taskArgs, hre) => {
   const { ethers } = hre;
   const [owner] = await ethers.getSigners();
 
@@ -167,10 +167,16 @@ task("lukso:e2e").setAction(async (_taskArgs, hre) => {
 
   const hypERC20CollateralFactoryL =
     await ethers.getContractFactory("HypERC20Collateral");
-  const hypERC20CollateralL = await hypERC20CollateralFactoryL.deploy();
+  const hypERC20CollateralL = await hypERC20CollateralFactoryL.deploy(
+    await mockERC20L.getAddress(),
+    await mailboxL.getAddress()
+  );
 
   const hypERC20FactoryL = await ethers.getContractFactory("HypERC20");
-  const hypERC20L = await hypERC20FactoryL.deploy();
+  const hypERC20L = await hypERC20FactoryL.deploy(
+    18,
+    await mailboxL.getAddress()
+  );
 
   const LuksoAddress = {
     mailbox: await mailboxL.getAddress(),
@@ -192,7 +198,7 @@ task("lukso:e2e").setAction(async (_taskArgs, hre) => {
 
   console.log("LUKSO addresses ", LuksoAddress);
   console.log("Switch to Mainnet");
-  await hre.changeNetwork("fmainnet");
+  await hre.changeNetwork("fethereum");
 
   const hashiHookFactoryM = await ethers.getContractFactory("HashiHook");
   const hashiHookM = await hashiHookFactoryM.deploy(
@@ -260,7 +266,7 @@ task("lukso:e2e").setAction(async (_taskArgs, hre) => {
 
   console.log("Deployment & Configuration Done");
 
-  await hre.changeNetwork("fmainnet");
+  await hre.changeNetwork("fethereum");
 
   console.log("Relaying token from Mainnet");
   const hyperlaneMessageFromM = getHyperlaneMessage({
@@ -354,7 +360,7 @@ task("lukso:e2e").setAction(async (_taskArgs, hre) => {
 
   getMessageFromDispatch({ receipt: dispatchReceiptL });
 
-  await hre.changeNetwork("fmainnet");
+  await hre.changeNetwork("fethereum");
 
   console.log("Execute on Mainnet");
   let yaruTxM = await yaruM.executeMessages([hashiMessageFromL]);

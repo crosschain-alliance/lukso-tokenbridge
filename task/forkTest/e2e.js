@@ -11,7 +11,7 @@ const {
 // To run the task
 // 1. Create fork for mainnet: yarn hardhat node --fork https://eth.llamarpc.com
 // 2. Create fork for LUKSO: yarn hardhat node --fork https://rpc.lukso.sigmacore.io --port 8544
-// 3. yarn hardhat lukso:e2e --network fmainnet
+// 3. yarn hardhat lukso:e2e --network fethereum
 
 task("lukso:e2e").setAction(async (_taskArgs, hre) => {
   const { ethers } = hre;
@@ -30,9 +30,6 @@ task("lukso:e2e").setAction(async (_taskArgs, hre) => {
 
   const mockHookFactoryM = await ethers.getContractFactory("MockHook");
   const mockHookM = await mockHookFactoryM.deploy();
-
-  // const hashiFactoryM = await ethers.getContractFactory("Hashi");
-  // const hashiM = await hashiFactoryM.deploy();
 
   const yahoFactoryM = await ethers.getContractFactory("MockYaho");
   const yahoM = await yahoFactoryM.deploy();
@@ -81,9 +78,6 @@ task("lukso:e2e").setAction(async (_taskArgs, hre) => {
   const mockHookFactoryL = await ethers.getContractFactory("MockHook");
   const mockHookL = await mockHookFactoryL.deploy();
 
-  // const hashiFactoryL = await ethers.getContractFactory("Hashi");
-  // const hashiL = await hashiFactoryL.deploy();
-
   const yahoFactoryL = await ethers.getContractFactory("MockYaho");
   const yahoL = await yahoFactoryL.deploy();
 
@@ -129,7 +123,7 @@ task("lukso:e2e").setAction(async (_taskArgs, hre) => {
   );
 
   console.log("Switch to Mainnet");
-  await hre.changeNetwork("fmainnet");
+  await hre.changeNetwork("fethereum");
 
   const hashiHookFactoryM = await ethers.getContractFactory("HashiHook");
   const hashiHookM = await hashiHookFactoryM.deploy(
@@ -198,7 +192,7 @@ task("lukso:e2e").setAction(async (_taskArgs, hre) => {
 
   console.log("Deployment & Configuration Done");
 
-  await hre.changeNetwork("fmainnet");
+  await hre.changeNetwork("fethereum");
 
   console.log("Dispatch message from Mainnet");
   const hyperlaneMessageFromM = getHyperlaneMessage({
@@ -291,7 +285,7 @@ task("lukso:e2e").setAction(async (_taskArgs, hre) => {
 
   getMessageFromDispatch({ receipt: dispatchReceiptL });
 
-  await hre.changeNetwork("fmainnet");
+  await hre.changeNetwork("fethereum");
 
   console.log("Execute on Mainnet");
   let yaruTxM = await yaruM.executeMessages([hashiMessageFromL]);
