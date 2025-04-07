@@ -12,14 +12,15 @@
 
 **Off chain**
 
-1. Hashi [relayer](https://github.com/gnosis/hashi/tree/feat/v0.2.0/packages/relayer) (managed by CCIA team) will listen to event from Yaho contracts and request the reporter contracts to relay token relaying message.
-2. Hashi [executor](https://github.com/gnosis/hashi/tree/feat/v0.2.0/packages/executor) (managed by CCIA team) will listen to event from each Hashi adapter contracts and call Yaru.executeMessages. This step will check whether the Hashi adapters agree on a specify message id (a threshold number of hash is stored), and set the message Id to verified status.
-3. [Validator](https://docs.hyperlane.xyz/docs/protocol/agents/validators) (run by Hyperlane & LUKSO team) will sign the Merkle root when new dispatches happen in Mailbox.
-4. [Hyperlane relayer](https://docs.hyperlane.xyz/docs/protocol/agents/relayer) (run by Hyperlane team) relays the message by calling Mailbox.process().
+1. ZK light client will update the header from Ethereum periodically on LUKSO.
+1. Zk Light Client will listen to the `MessageDispatched` event from Yaho, generate proof, and verify on the adapter contract.
+1. Hashi [executor](https://github.com/gnosis/hashi/tree/feat/v0.2.0/packages/executor) (managed by CCIA team) will listen to event from each Hashi adapter contracts and call Yaru.executeMessages. This step will check whether the Hashi adapters agree on a specify message id (a threshold number of hash is stored), and set the message Id to verified status.
+1. [Validator](https://docs.hyperlane.xyz/docs/protocol/agents/validators) (run by Hyperlane & LUKSO team) will sign the Merkle root when new dispatches happen in Mailbox.
+1. [Hyperlane relayer](https://docs.hyperlane.xyz/docs/protocol/agents/relayer) (run by Hyperlane team) relays the message by calling Mailbox.process().
 
 **LUKSO**
 
-1. When Mailbox.process() is called, it will verify with Static Aggregation ISM (aggregate result from Hyperlane defualt ISM, Multisig ISM (validated by LUKSO validator), Hashi ISM). If so, it will mint hypERC20 token to the receiver.
+1. When Mailbox.process() is called, it will verify with Static Aggregation ISM (aggregate result from Hyperlane default ISM, Multisig ISM (validated by LUKSO validator), Hashi ISM). If so, it will mint hypERC20 token to the receiver.
 2. For compatibility, LSP7 wrapper need to be created to mint LSP7 token to the user.
 
 ## Workflow ( LUKSO → Ethereum)
@@ -28,14 +29,14 @@
 
 **LUKSO**
 
-1. User transfer LSP7 token to HypERC20 contract and the token is locked.
-2. HypERC20 contract call Mailbox to pass the message.
+1. User transfer LSP7 token to HypLSP7 contract and the token is locked.
+2. HypLSP7 contract call Mailbox to pass the message.
 3. Mailbox call Default Hook (created by Hyperlane) and Hashi Hook (created by CCIA team).
 4. Hashi Hook dispatch the token relaying message from Yaho contracts.
 
 **Off chain**
 
-1. Off chain process remains the same as before, except there is no Light Client support for Hashi from LUKSO → Ethereum.
+1. Off chain process remains the same as the previous section.
 
 **Ethereum**
 

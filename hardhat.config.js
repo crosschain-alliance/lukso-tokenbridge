@@ -1,7 +1,7 @@
 require("@nomicfoundation/hardhat-toolbox");
 require("hardhat-tracer");
 require("./task/forkTest/e2e");
-require("./task/forkTest/pingpong");
+require("./task/forkTest/tokene2e");
 require("./task/deploy");
 require("./task/setup/hookAndIsm");
 require("./task/setup/hashiManager");
@@ -34,18 +34,21 @@ module.exports = {
       accounts: [process.env.PRIVATE_KEY],
       chainId: 4201,
     },
-    fethereum: {
-      url: "http://127.0.0.1:8545",
+    gnosis: {
+      url: "https://rpc.gnosischain.com",
+      accounts: [process.env.PRIVATE_KEY],
+      chainId: 100,
     },
-    flukso: {
-      url: "http://127.0.0.1:8544",
-    },
+    fethereum: { url: "http://127.0.0.1:8545" },
+    flukso: { url: "http://127.0.0.1:8544" },
   },
   etherscan: {
     apiKey: {
       lukso: "",
       ethereum: process.env.ETHERSCAN_API_KEY || "",
+      mainnet: process.env.ETHERSCAN_API_KEY || "",
       gnosis: process.env.GNOSISSCAN_API_KEY || "",
+      xdai: process.env.GNOSISSCAN_API_KEY || "",
       sepolia: process.env.ETHERSCAN_API_KEY || "",
     },
     customChains: [
@@ -69,12 +72,6 @@ module.exports = {
   },
   solidity: {
     version: "0.8.25",
-    settings: {
-      viaIR: true,
-      optimizer: {
-        enabled: true,
-        runs: 200,
-      },
-    },
+    settings: { viaIR: true, optimizer: { enabled: true, runs: 200 } },
   },
 };
