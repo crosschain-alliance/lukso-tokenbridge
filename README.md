@@ -12,9 +12,9 @@
 
 **Off chain**
 
-1. ZK light client will update the header from Ethereum periodically on LUKSO.
-1. Zk Light Client will listen to the `MessageDispatched` event from Yaho, generate proof, and verify on the adapter contract.
-1. Hashi [executor](https://github.com/gnosis/hashi/tree/feat/v0.2.0/packages/executor) (managed by CCIA team) will listen to event from each Hashi adapter contracts and call Yaru.executeMessages. This step will check whether the Hashi adapters agree on a specify message id (a threshold number of hash is stored), and set the message Id to verified status.
+1. ZK light client will update the header from Ethereum periodically on LUKSO. [code](https://github.com/crosschain-alliance/sp1-helios)
+1. Zk light Client prover will listen to the `MessageDispatched` event from Yaho, generate proof, and verify on the adapter contract. [code](https://github.com/crosschain-alliance/hashi-adapter-prover)
+1. Hashi [executor](https://github.com/gnosis/hashi/tree/feat/v0.2.0/packages/executor) (managed by CCIA team) will listen to event from each Hashi adapter contracts and call Yaru.executeMessages. This step will check whether the Hashi adapters agree on a specific message id (a threshold number of the same hash is stored), and set the message as approved.
 1. [Validator](https://docs.hyperlane.xyz/docs/protocol/agents/validators) (run by Hyperlane & LUKSO team) will sign the Merkle root when new dispatches happen in Mailbox.
 1. [Hyperlane relayer](https://docs.hyperlane.xyz/docs/protocol/agents/relayer) (run by Hyperlane team) relays the message by calling Mailbox.process().
 
@@ -36,11 +36,13 @@
 
 **Off chain**
 
-1. Off chain process remains the same as the previous section.
+1. Off chain process remains the same as the previous section, with the opposite direction.
 
 **Ethereum**
 
 1. When Mailbox.process() is called, it will check with Static Aggregation ISM (aggregate result from Hyperlane defualt ISM, Multisig ISM (validated by LUKSO validator), Hashi ISM). If so, it will unlock ERC20 token to the receiver.
+
+> > For the contract transaction calls, refer to [End to End test](./docs/EndToEndTest.md)
 
 ## Reference
 
@@ -59,11 +61,6 @@
 
 1. LSP7: https://docs.lukso.tech/standards/tokens/LSP7-Digital-Asset/
 2. HypLSP7: https://github.com/lukso-network/lsp-bridge-HypLSP7/blob/main/README.md
-
-### Testing
-
-1. Overview: https://hackmd.io/hMZGG8AQSAqOYOg9dHDTdw?view
-2. Setting up the test & infrastructure: https://hackmd.io/@-adIpdkCSKa4XOtLHg41Kw/BkCp4xt_1e
 
 # Dev
 
@@ -120,12 +117,14 @@ yarn hardhat test
 Fork test
 
 ```
-yarn hardhat node --fork https://eth.llamarpc.com
-yarn hardhat node --fork https://rpc.lukso.sigmacore.io --port 8544
+yarn hardhat node --fork $ETHEREUM_RPC_URL
+yarn hardhat node --fork $LUKSO_RPC_URL --port 8544
 yarn hardhat lukso:e2e --network fethereum
 ```
 
 # Configuration
+
+Check out the contract addresses in [Contracts Deployment](./docs/ContractDeployment.md)
 
 ```
 PRIVATE_KEY= # Private key for contract deployments
@@ -159,15 +158,15 @@ LUKSO_STATIC_AGGREGATION_ISM_FACTORY=0x8F7454AC98228f3504Bb91eA3D8Adafe6406110A
 LUKSO_MAILBOX=0x2f2aFaE1139Ce54feFC03593FeE8AB2aDF4a85A7
 
 # New contracts (address might change in the producation)
-ETHEREUM_HASHI_HOOK=0xfd806f2DD9D744b2Db4ACb0DF7F9148DD7442AE0
-ETHEREUM_HASHI_ISM=0x54F42816229F0022c2EcD4d05c9f823a9d7F3093
-ETHEREUM_MERKLE_ROOT_MULTISIG_ISM=0x65b9b2ad51e38cdc8e62dd0c3c19995267dc177c #Multisig ISM contract validated by LUKSO validator
+ETHEREUM_HASHI_HOOK=
+ETHEREUM_HASHI_ISM=
+ETHEREUM_MERKLE_ROOT_MULTISIG_ISM= #Multisig ISM contract validated by LUKSO validator
 ETHEREUM_STATIC_AGGREGATION_HOOK=
 ETHEREUM_STATIC_AGGREGATION_ISM=
 
-LUKSO_HASHI_HOOK=0x8Da11EB25bE349472eA4C8Acc6f246CE42a7f17b
-LUKSO_HASHI_ISM=0xDbdF80c87f414fac8342e04D870764197bD3bAC7
-LUKSO_MERKLE_ROOT_MULTISIG_ISM=0xDbdF80c87f414fac8342e04D870764197bD3bAC7
+LUKSO_HASHI_HOOK=
+LUKSO_HASHI_ISM=
+LUKSO_MERKLE_ROOT_MULTISIG_ISM=
 LUKSO_STATIC_AGGREGATON_HOOK=
 LUKSO_STATIC_AGGREGATION_ISM=
 
@@ -175,9 +174,4 @@ LUKSO_STATIC_AGGREGATION_ISM=
 HASHI_MANAGER_THRESHOLD=1
 HOOK_THRESHOLD=1
 ISM_THRESHOLD=1
-
-# Test
-ETHEREUM_MOCK_REPORTER=
-ETHEREUM_MOCK_ADAPTER=
-ERC20_ADDRESS=
 ```

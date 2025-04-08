@@ -2,15 +2,15 @@
 
 This API allows users to check the status of a message being processed on the LUKSO blockchain through the Hashi bridge. By entering a transaction hash, the system will return whether the message has been detected or approved:
 
-1. When a tx is originated on the source chain, one can check the messageId from Hashi from `MessageDisaptched` event: (i.e. `0xed0bdd51708bfc1048e5bdaa808905dc664f7654858dbddb4a202db787a9f9e5` in https://gnosisscan.io/tx/0x697aa6b0ae1780fa424107cbdcb60dc03e4168badc0d07eec44676c1882ad918#eventlog). The API returns `detected` when this event is emitted.
-2. On destination chain, `MessageExecuted` event will emit for the same messageId (https://explorer.execution.mainnet.lukso.network/tx/0xde88ee76855de7fdf8289b8c16202bf6aca9d8437554ff58ad0e96f2e72b0185?tab=logs). The API returns `approved` when this event is emitted.
+1. When a tx is originated on the source chain, one can check the status of a message by pasting the transactio hash. By calling https://hashi-explorer.xyz/api_bridge_ui/message_status?txhash=${TransactionHash}. The API returns `detected` when this event is emitted.
+2. On destination chain, `MessageExecuted` event will emit for the same messageId. The API returns `approved` when this event is emitted.
 
 ## How to Use
 
 Send a GET request to the following URL with your txhash
 
 ```
-https://hashi-url/txhash=0xYourTransactionHash
+https://hashi-explorer.xyz/api_bridge_ui/message_status?txhash=0xYourTransactionHash
 ```
 
 Response Format
@@ -19,7 +19,7 @@ The API will return a response in this format:
 ```
 {
   "txhash": "0xYourTransactionHash",
-  "messageId": "0xUniqueMessageID",
+  "messageId": "UniqueHashiMessageID",
   "status": "detected" | "approved"
 }
 ```
@@ -32,7 +32,7 @@ info:
   description: API to query the status of a message from Hashi on LUKSO
   version: 1.0.0
 servers:
-  - url: https://hashi-api.lukso.io
+  - url: https://hashi-explorer.xyz/api_bridge_ui
     description: Production Server
 paths:
   /message-status:
@@ -61,7 +61,7 @@ paths:
                     description: The transaction hash
                   messageId:
                     type: string
-                    pattern: '^0x[a-fA-F0-9]{64}$'
+                    pattern: '^[0-9]+$''
                     description: The unique identifier of the message
                   status:
                     type: string
@@ -76,3 +76,24 @@ paths:
         '500':
           description: Internal server error
 ```
+
+## Example:
+
+LUKSO -> Ethereum
+
+1. Transaction: https://explorer.execution.mainnet.lukso.network/tx/0xc6d7f01c9dfc6b50c7090885e7281d3aed907dc660b7618189f3bedb31ac363a
+2. Call https://hashi-explorer.xyz/api_bridge_ui/message_status?txhash=0xc6d7f01c9dfc6b50c7090885e7281d3aed907dc660b7618189f3bedb31ac363a
+   Return
+
+```json
+{
+  "messageId": "88970975724097140060143549266010996084196616509768344962406224027136485319685",
+  "status": "approved",
+  "txhash": "0xc6d7f01c9dfc6b50c7090885e7281d3aed907dc660b7618189f3bedb31ac363a"
+}
+```
+
+By using the messageId, one can query on [Hashi Explorer](https://hashi-explorer.xyz)
+
+URL: https://hashi-explorer.xyz/d/edklrl7qg7i80d/messages-status-2?orgId=1&var-messageId=88970975724097140060143549266010996084196616509768344962406224027136485319685&from=now-90d&to=now&timezone=browser  
+![](../static/img/hashi-explorer-example.png)

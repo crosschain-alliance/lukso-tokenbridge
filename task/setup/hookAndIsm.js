@@ -6,7 +6,6 @@ const path = require("path");
 require("@nomicfoundation/hardhat-toolbox/network-helpers");
 
 /// @Dev This setup script deploy the Aggregation Hook and Aggregation ISM that is used for HypERC20 token
-/// Optionally, one can deploy token and initialize it by setting --istokendeploy
 /// By default, the source chain is Ethereum
 /// Run: yarn hardhat setup:hookAndIsm --network ethereum
 task("setup:hookAndIsm").setAction(async (_taskArgs, hre) => {

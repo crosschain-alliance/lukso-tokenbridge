@@ -11,6 +11,7 @@ import {StaticAggregationHookFactory} from "@hyperlane-xyz/core/contracts/hooks/
 import {StaticAggregationIsm} from "@hyperlane-xyz/core/contracts/isms/aggregation/StaticAggregationIsm.sol";
 import {StaticAggregationIsmFactory} from "@hyperlane-xyz/core/contracts/isms/aggregation/StaticAggregationIsmFactory.sol";
 import {StaticMerkleRootMultisigIsmFactory} from "@hyperlane-xyz/core/contracts/isms/multisig/StaticMultisigIsm.sol";
+import { StaticMerkleRootMultisigIsm } from "@hyperlane-xyz/core/contracts/isms/multisig/StaticMultisigIsm.sol";
 import {Mailbox} from "@hyperlane-xyz/core/contracts/Mailbox.sol";
 import {TestMailbox} from "@hyperlane-xyz/core/contracts/test/TestMailbox.sol";
 import {TestPostDispatchHook} from "@hyperlane-xyz/core/contracts/test/TestPostDispatchHook.sol";

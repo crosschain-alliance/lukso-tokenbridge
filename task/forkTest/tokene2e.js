@@ -9,9 +9,9 @@ const {
 } = require("../utils/index");
 
 // To run the task
-// 1. Create fork for mainnet: yarn hardhat node --fork https://eth.llamarpc.com
-// 2. Create fork for LUKSO: yarn hardhat node --fork https://rpc.lukso.sigmacore.io --port 8544
-// 3. yarn hardhat lukso:e2e --network fethereum
+// 1. Create fork for mainnet: yarn hardhat node --fork $ETHEREUM_RPC_URL
+// 2. Create fork for LUKSO: yarn hardhat node --fork $LUKSO_RPC_URL --port 8544
+// 3. yarn hardhat token:e2e --network fethereum
 
 task("token:e2e").setAction(async (_taskArgs, hre) => {
   const { ethers } = hre;
